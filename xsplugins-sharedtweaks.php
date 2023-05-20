@@ -28,6 +28,9 @@ function xershade_hide_login_form() {
     echo $style; 
 }
 
+/**
+* This styles the social login buttons, because I'm not paying $70 for a plugin that does it.
+*/
 add_action( 'login_head', 'xershade_social_login_tweaks' );
 function xershade_social_login_tweaks() {
     $style = '';
@@ -45,3 +48,53 @@ function xershade_social_login_tweaks() {
 
     echo $style; 
 }
+
+/**
+* This replaces words in the administartor panels and other wordpress components we can't edit.
+*/
+add_filter(  'gettext',  'wps_translate_words_array' );
+add_filter(  'ngettext',  'wps_translate_words_array' );
+function wps_translate_words_array( $translated ) {
+    // Define a list of words to be translated.
+    $words = array(
+        // 'words to translate' = > 'translation'
+        'super admin' => 'network administrator',
+        'Super Admin' => 'Network Administrator',
+
+        // Potential partial word replace filter fixes.
+        'istratoristrator' => 'istrator',
+    );
+
+    // Translate the words and return the result.
+    return str_replace( array_keys($words), $words, $translated );
+}
+
+/**
+* This tweakes the names of wordpress roles we can't edit.
+*/
+add_action( 'wp_roles_init', static function ( \WP_Roles $roles ) {
+    // Override the default 'subscriber' role to 'member'.
+    $roles->roles['subscriber']['name'] = 'Member';
+    $roles->role_names['subscriber']    = 'Member';
+} );
+
+/**
+* This removes permissions from all user groups, used to purge old data from the database.
+* (Notice: This will irriversibly delete data, do not use this unless abasolutely sure.)
+*/
+add_action( 'wp_roles_init', static function ( \WP_Roles $roles ) {
+    // Defines a list of permissions to remove.
+	$remove_permissions = array(
+		
+    );
+
+    // Stop if we don't have any permissions to remove.
+    if(count($remove_permissions) < 1) { return; }
+
+    // Remove the permissions from each user role.
+	foreach ($remove_permissions as $permission) {
+		foreach (array_keys($roles->roles) as $role) {
+			$roles->remove_cap($role, $permission);
+		}
+	}
+} );
