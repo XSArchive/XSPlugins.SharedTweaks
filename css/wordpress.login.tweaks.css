@@ -1,0 +1,24 @@
+.login form {
+  padding: 24px;
+}
+.login label {
+  display: none;
+}
+.login .button.wp-hide-pw .dashicons {
+  display: none;
+}
+.login form .input {
+  display: none;
+}
+.login form .submit {
+  display: none;
+}
+.login form .forgetmenot {
+  display: none;
+}
+.login #nav a {
+  display: none;
+}
+.login #backtoblog a {
+  display: block;
+}
