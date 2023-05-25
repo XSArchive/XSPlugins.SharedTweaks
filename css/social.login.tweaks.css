@@ -2,20 +2,25 @@
   display: block;
   margin-bottom: 1em;
 }
+
 .heateor_sl_optin_container label {
   display: block;
   margin-top: 1.2em;
 }
+
 ul.heateor_sl_login_ul li {
   width: 100% !important;
 }
+
 .heateorSlLogin {
   width: 100%;
   height: 3em !important;
 }
+
 .heateorSlLoginSvg {
   background-position: 3% !important;
 }
+
 .heateorSlLoginSvg:after {
   position: relative;
   top: 25%;
@@ -25,12 +30,15 @@ ul.heateor_sl_login_ul li {
   text-decoration: none;
   font-style: normal;
 }
+
 .heateorSlDiscordLoginSvg:after {
   content: "Login With Discord";
 }
+
 .heateorSlGithubLoginSvg {
   background-size: initial;
 }
+
 .heateorSlGithubLoginSvg:after {
   content: "Login With GitHub";
 }
