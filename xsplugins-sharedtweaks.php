@@ -13,29 +13,30 @@ Version: 1.0.0
 * This styles the social login buttons, because I'm not paying $70 for a plugin that does it.
 */
 add_action( 'login_enqueue_scripts', 'enqueue_login_tweaks', 100 );
-function enqueue_login_tweaks() {
-    wp_enqueue_style( 'wordpress.login.tweaks', plugins_url( 'css/wordpress.login.tweaks.css' , __FILE__ ) );
-    wp_enqueue_style( 'social.login.tweaks', plugins_url( 'css/social.login.tweaks.css' , __FILE__ ) );
+if ( ! function_exists( 'enqueue_login_tweaks' ) ) {
+    function enqueue_login_tweaks() {
+        wp_enqueue_style( 'wordpress.login.tweaks', plugins_url( 'css/wordpress.login.tweaks.css' , __FILE__ ) );
+        wp_enqueue_style( 'social.login.tweaks', plugins_url( 'css/social.login.tweaks.css' , __FILE__ ) );
+    }
 }
 
 /**
 * This replaces words in the administartor panels and other wordpress components we can't edit.
 */
-add_filter(  'gettext',  'wps_translate_words_array' );
-add_filter(  'ngettext',  'wps_translate_words_array' );
-function wps_translate_words_array( $translated ) {
-    // Define a list of words to be translated.
-    $words = array(
-        // 'words to translate' = > 'translation'
-        'super admin' => 'network administrator',
-        'Super Admin' => 'Network Administrator',
+add_filter(  'gettext',  'translate_word_replacements' );
+add_filter(  'ngettext',  'translate_word_replacements' );
+function translate_word_replacements( $translated ) {
+    // Set the path to the word replacements file.
+    $jsonPath = plugin_dir_path( __FILE__ ) . 'includes/word-replacement-filters.json';
 
-        // Potential partial word replace filter fixes.
-        'istratoristrator' => 'istrator',
-    );
+    // Read the replacements json file from disk.
+    $jsonString = file_get_contents($jsonPath);    
+
+    // Decode the json data to an array.
+    $jsonData = json_decode($jsonString, true);
 
     // Translate the words and return the result.
-    return str_replace( array_keys($words), $words, $translated );
+    return str_replace( array_keys($jsonData), $jsonData, $translated );
 }
 
 /**
